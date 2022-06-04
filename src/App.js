@@ -38,8 +38,21 @@ function App() {
      setTurns(0)
    }
 
-   console.log(cards,turns);
+ //handel a choice
+ const handelChoice = (card) =>{
+  choiceOne ? setChoiceTwo(card) : setChoiceOne(card)
+  
+ }
 
+ //compare 2 selected cars
+
+ //rest choice
+
+ const restTurn = () =>{
+   setChoiceOne(null)
+   setChoiceTwo(null)
+   setTurns(prevTurns =>prevTurns + 1)
+ }
 
 
   return (
@@ -48,7 +61,12 @@ function App() {
       <button onClick={shuffleCards}>بازی جدید</button>
       <div className="Card-grid">
         {cards.map(card=>(
-          <SingleCard key={card.id} card={card} />
+          <SingleCard 
+          key={card.id} 
+          card={card} 
+          handelChoice={handelChoice}
+          />
+         
         ))}
       </div>
     </div>
