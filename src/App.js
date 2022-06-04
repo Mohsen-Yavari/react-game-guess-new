@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import './App.scss';
 import SingleCard from "./components/SingleCard";
 
@@ -13,12 +13,12 @@ import img7 from "./img/shield-1.png";
 
 const cardImages = [
 
-{src:img2},
-{src:img3},
-{src:img4},
-{src:img5},
-{src:img6},
-{src:img7}
+{src:img2 ,matched:false},
+{src:img3 ,matched:false},
+{src:img4 ,matched:false},
+{src:img5 ,matched:false},
+{src:img6 ,matched:false},
+{src:img7 ,matched:false}
 
 ]
 
@@ -27,6 +27,7 @@ function App() {
   const [turns,setTurns] = useState(0);
   const [choiceOne,setChoiceOne] = useState(null);
   const [choiceTwo,setChoiceTwo] = useState(null);
+  const [desabled,setDesabled] = useState(false)
 
   //shafel cards
    const shuffleCards = () =>{
@@ -45,6 +46,28 @@ function App() {
  }
 
  //compare 2 selected cars
+ useEffect(()=>{
+
+   if(choiceOne && choiceTwo){
+    setDesabled(true)
+    if(choiceOne.src === choiceTwo.src) {
+      setCards(prevCards => {
+        return prevCards.map(card =>{
+          if (card.src === choiceOne.src) {
+            return {...card,matched:true}
+          } else {
+            return card
+          }
+        })
+      })
+      restTurn()
+    } else {
+     
+     setTimeout(() => restTurn(), 1000)
+    }
+   }
+ }, [choiceOne,choiceTwo])
+ console.log(cards)
 
  //rest choice
 
@@ -52,23 +75,30 @@ function App() {
    setChoiceOne(null)
    setChoiceTwo(null)
    setTurns(prevTurns =>prevTurns + 1)
+   setDesabled(false)
  }
+
+//  start a new game automatically
+
 
 
   return (
     <div className="App">
-      <h1>  جادویی</h1>
+      <h1>  حدس تصویر</h1>
       <button onClick={shuffleCards}>بازی جدید</button>
       <div className="Card-grid">
-        {cards.map(card=>(
+        {cards.map(card => (
           <SingleCard 
           key={card.id} 
           card={card} 
           handelChoice={handelChoice}
+          flipped={card === choiceOne || card === choiceTwo || card.matched}
+          desabled={desabled}
           />
          
         ))}
       </div>
+      <p>دور:{turns}</p>
     </div>
   );
 }

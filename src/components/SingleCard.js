@@ -2,16 +2,19 @@ import React from 'react';
 import "./singleCard.scss";
 import img1 from "../img/cover.png";
 
-const SingleCard = ({card,handelChoice}) => {
+const SingleCard = ({card,handelChoice,flipped,desabled}) => {
 
 const handelClick = () =>{
-    handelChoice(card)
+    if(!desabled){
+        handelChoice(card)
+
+    }
 }
 
     return (
-        <div>
+       
            <div className="Card" >
-            <div>
+            <div className={flipped ? "flipped" : ""}>
               <img className="front" src={card.src} alt="cart front" />
               <img 
               className="back" 
@@ -20,7 +23,7 @@ const handelClick = () =>{
               alt="cart back" />
             </div>
           </div>
-        </div>
+   
     );
 };
 
